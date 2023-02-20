@@ -11,7 +11,7 @@ fn main() {
 const LINK: &[u8] = b"
 OUTPUT_ARCH(riscv)
 ENTRY(main)
-PROVIDE(stext = 0x80200000);
+PROVIDE(stext = 0xa0000000);
 
 SECTIONS
 {
