@@ -10,18 +10,18 @@ fn main() {
 
 const LINK: &[u8] = b"
 OUTPUT_ARCH(riscv)
-ENTRY(_start)
+ENTRY(main)
 PROVIDE(stext = 0x80200000);
 
 SECTIONS
 {
-    .text _stext : {
+    .text stext : {
         stext = .;
         *(.text.entry)
         *(.text .text.*)
         . = ALIGN(4);
         etext = .;
-    } > REGION_TEXT
+    }
 
     .rodata : ALIGN(4) {
         srodata = .;
@@ -29,23 +29,27 @@ SECTIONS
         *(.srodata .srodata.*)
         . = ALIGN(4);
         erodata = .;
-    } > REGION_RODATA
+    }
 
     .data : ALIGN(4) {
-        _sidata = LOADADDR(.data);
-        _sdata = .;
+        sidata = LOADADDR(.data);
+        sdata = .;
         PROVIDE(__global_pointer$ = . + 0x800);
         *(.data .data.*)
         *(.sdata .sdata.*)
         . = ALIGN(4);
-        _edata = .;
-    } > REGION_DATA
+        edata = .;
+    }
 
     .bss (NOLOAD) : ALIGN(4) {
-        _sbss = .;
+        sbss = .;
         *(.bss .bss.*)
         *(.sbss .sbss.*)
         . = ALIGN(4);
-        _ebss = .;
-    } > REGION_BSS
+        ebss = .;
+    }
+
+    /DISCARD/ : {
+        *(.eh_frame .eh_frame_hdr)
+    }
 }";
